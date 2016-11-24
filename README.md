@@ -8,7 +8,7 @@ JavaScript helper for deep cloning and deep merging objects as efficiently as po
 
 # Installation
 
-```npm install croner```
+```npm install klon```
 
 # Usage
 
