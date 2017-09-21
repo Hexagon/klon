@@ -26,7 +26,7 @@ SOFTWARE.
 
 "use strict";
 
-function klon (source, target, trace) {
+function klon (source, target, breakCircular, trace) {
 
     // No need to copy null, undefined or primitive values
     // Shortest way first
@@ -68,8 +68,13 @@ function klon (source, target, trace) {
 
         // Circular reference? Store the circular reference and move on to next property
         if ( circularReference = trace.get(prop) ) {
-            target[key] = circularReference;
-            continue;
+            if ( !breakCircular ) {
+                    target[key] = circularReference;
+                    continue;
+            } else {
+                    target[key] = "[Circular]"
+                    continue;
+            }
         }
 
         // Pure objects and arrays need tracing
@@ -78,7 +83,7 @@ function klon (source, target, trace) {
         }
 
         // Ok, this seem to be a simple value, assign it
-        target[key] = klon(prop, target[key], trace);
+        target[key] = klon(prop, target[key], breakCircular, trace);
 
     }
 

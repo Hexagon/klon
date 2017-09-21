@@ -81,6 +81,26 @@ describe("Deep Extend / Clone / Merge", function () {
         
     });
 
+    it("Break shallow circular reference", function () {
+        
+        var simpleObject = {
+                a: {
+                    b: {
+
+                    }
+                }
+            },
+            clonedObject;
+
+        // Create a circular reference
+        simpleObject.a.b = simpleObject.a;
+
+        clonedObject = clone(simpleObject, undefined, true);
+
+        clonedObject.a.b.should.equal("[Circular]");
+        
+    });
+
     it("Circular reference", function () {
         
         var simpleObject = {
@@ -109,6 +129,31 @@ describe("Deep Extend / Clone / Merge", function () {
 
         // Test recursion into the circular reference
         clonedObject.b.c.d.e.c.d.val.should.equal(2);
+        
+    });
+
+    it("Breaking circular reference", function () {
+        
+        var simpleObject = {
+                a: 1,
+                b: {
+                    c: {
+                        d: {
+                            val: 2
+                        }
+                    }
+                },
+                d: 3
+            },
+            clonedObject;
+
+        // Create a circular reference
+        simpleObject.b.c.d.e = simpleObject.b;
+
+        clonedObject = clone(simpleObject, undefined, true);
+
+        // Test that the circular reference works
+        clonedObject.b.c.d.e.should.equal("[Circular]");
         
     });
 
